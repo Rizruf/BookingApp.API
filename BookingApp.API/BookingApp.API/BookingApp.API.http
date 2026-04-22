@@ -1,0 +1,16 @@
+@BookingApp.API_HostAddress = http://localhost:5291
+
+### Пробуем получить все отели (пока база пустая, должен вернуться [])
+GET {{BookingApp.API_HostAddress}}/api/hotels
+Accept: application/json
+
+###
+
+### Добавляем первый отель в нашу реальную базу!
+POST {{BookingApp.API_HostAddress}}/api/hotels
+Content-Type: application/json
+
+{
+  "title": "Хилтон Паттайя",
+  "description": "Шикарный вид на море, 5 звезд"
+}
