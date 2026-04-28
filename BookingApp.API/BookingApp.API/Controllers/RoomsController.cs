@@ -7,59 +7,57 @@ namespace BookingApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HotelsController : ControllerBase 
+
+    public class RoomsController : ControllerBase
     {
         private readonly BookingDbContext _context;
 
-        public HotelsController(BookingDbContext context)
+        public RoomsController(BookingDbContext context)
         {
             _context = context;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRoom(Hotel newHotel)
+        public async Task<IActionResult> CreateRoom(Room newRoom)
         {
-            await _context.Hotels.AddAsync(newHotel);
+            await _context.Rooms.AddAsync(newRoom);
 
             await _context.SaveChangesAsync();
 
-            return Ok(newHotel);
+            return Ok(newRoom);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetRooms()
         {
-            var hotels = await _context.Hotels
-                                .Include(h => h.Rooms)
-                                .ToListAsync();
-            return Ok(hotels);
+            var rooms = await _context.Rooms.ToListAsync();
+            return Ok(rooms);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateRoom(Hotel hotel)
+        public async Task<IActionResult> UpdateRoom(Room newRoom)
         {
-            _context.Hotels.Update(hotel);
+            _context.Rooms.Update(newRoom);
 
             await _context.SaveChangesAsync();
 
-            return Ok(hotel);
+            return Ok(newRoom);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoom(int id)
         {
-            var room = await _context.Hotels.FindAsync(id);
+            var room = await _context.Rooms.FindAsync(id);
 
             if (room == null)
             {
                 return NotFound();
             }
 
-            _context.Hotels.Remove(room);
+            _context.Rooms.Remove(room);
             await _context.SaveChangesAsync();
 
             return Ok(new { Message = $"Комната {room.Title} успешно удалена" });
         }
-
     }
 }
