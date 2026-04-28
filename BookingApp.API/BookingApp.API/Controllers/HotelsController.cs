@@ -17,7 +17,7 @@ namespace BookingApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRoom(Hotel newHotel)
+        public async Task<IActionResult> CreateHotel(Hotel newHotel)
         {
             await _context.Hotels.AddAsync(newHotel);
 
@@ -27,7 +27,7 @@ namespace BookingApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRooms()
+        public async Task<IActionResult> GetHotels()
         {
             var hotels = await _context.Hotels
                                 .Include(h => h.Rooms)
@@ -36,7 +36,7 @@ namespace BookingApp.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateRoom(Hotel hotel)
+        public async Task<IActionResult> UpdateHotel(Hotel hotel)
         {
             _context.Hotels.Update(hotel);
 
@@ -46,19 +46,19 @@ namespace BookingApp.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRoom(int id)
+        public async Task<IActionResult> DeleteHotel(int id)
         {
-            var room = await _context.Hotels.FindAsync(id);
+            var hotel = await _context.Hotels.FindAsync(id);
 
-            if (room == null)
+            if (hotel == null)
             {
                 return NotFound();
             }
 
-            _context.Hotels.Remove(room);
+            _context.Hotels.Remove(hotel);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = $"Комната {room.Title} успешно удалена" });
+            return Ok(new { Message = $"Отель {hotel.Title} успешно удален" });
         }
 
     }
