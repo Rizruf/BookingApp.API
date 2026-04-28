@@ -1,6 +1,7 @@
 ﻿using BookingApp.API.Data;
 using BookingApp.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingApp.API.Controllers
 {
@@ -15,22 +16,49 @@ namespace BookingApp.API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public IActionResult GetHotels()
+        [HttpPost]
+        public async Task<IActionResult> CreateHotel(Hotel newHotel)
         {
-            var hotels = _context.Hotels.ToList();
+            await _context.Hotels.AddAsync(newHotel);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(newHotel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetHotels()
+        {
+            var hotels = await _context.Hotels.ToListAsync();
 
             return Ok(hotels);
         }
 
-        [HttpPost]
-        public IActionResult CreateHotel(Hotel newHotel)
+        [HttpPut]
+        public async Task<IActionResult> UpdateHotel(Hotel hotel)
         {
-            _context.Hotels.Add(newHotel);
+            _context.Hotels.Update(hotel);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return Ok(newHotel);
+            return Ok(hotel);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteHotel(int id)
+        {
+            var hotel = await _context.Hotels.FindAsync(id);
+
+            if (hotel == null)
+            {
+                return NotFound();
+            }
+
+            _context.Hotels.Remove(hotel);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = $"Отель {hotel.Title} успешно удален" });
+        }
+
     }
 }

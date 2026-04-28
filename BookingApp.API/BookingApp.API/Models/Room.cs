@@ -1,11 +1,17 @@
-﻿using System.Runtime.ConstrainedExecution;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.ConstrainedExecution;
 
 namespace BookingApp.API.Models
 {
     public class Room
     {
         public int Id { get; set; }
+
+        [Required]
+        [MaxLength(50)]
         public string Title { get; set; } = string.Empty;
+
+        [Range(100, 1000000)]
         public decimal PricePerNight { get; set; }
 
         public int HotelId { get; set; }

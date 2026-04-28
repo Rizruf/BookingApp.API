@@ -1,9 +1,16 @@
-﻿namespace BookingApp.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BookingApp.API.Models
 {
     public class Hotel
     {
         public int Id { get; set; }
+
+        [Required]
+        [MaxLength(100)]
         public string Title { get; set; } = string.Empty;
+
+        [MaxLength(500)]
         public string Description { get; set; } = string.Empty;
 
         public List<Room> Rooms { get; set; } = new();

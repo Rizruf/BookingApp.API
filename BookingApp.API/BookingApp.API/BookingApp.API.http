@@ -1,12 +1,10 @@
 @BookingApp.API_HostAddress = http://localhost:5291
 
-### Пробуем получить все отели (пока база пустая, должен вернуться [])
+### 1. Посмотреть все отели (GET)
 GET {{BookingApp.API_HostAddress}}/api/hotels
 Accept: application/json
 
-###
-
-### Добавляем первый отель в нашу реальную базу!
+### 2. Добавить новый отель (POST)
 POST {{BookingApp.API_HostAddress}}/api/hotels
 Content-Type: application/json
 
@@ -14,3 +12,17 @@ Content-Type: application/json
   "title": "Хилтон Паттайя",
   "description": "Шикарный вид на море, 5 звезд"
 }
+
+### 3. Обновить отель (PUT) - ОБЯЗАТЕЛЬНО укажи существующий Id!
+PUT {{BookingApp.API_HostAddress}}/api/hotels
+Content-Type: application/json
+
+{
+  "id": 2,
+  "title": "Хилтон Паттайя Премиум",
+  "description": "Теперь 6 звезд и бесплатный мини-бар"
+}
+
+### 4. Удалить отель (DELETE) - удаляем точечно по Id
+DELETE {{BookingApp.API_HostAddress}}/api/hotels/2
+Accept: application/json
