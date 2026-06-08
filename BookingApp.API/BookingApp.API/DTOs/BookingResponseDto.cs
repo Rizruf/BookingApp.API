@@ -9,5 +9,7 @@ namespace BookingApp.API.DTOs
         public string GuestName { get; set; } = string.Empty;
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
+
+        public string RoomTitle { get; set; }
     }
 }

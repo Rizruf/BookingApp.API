@@ -1,87 +1,60 @@
-﻿using BookingApp.API.Data;
-using BookingApp.API.DTOs;
-using BookingApp.API.Models;
+﻿using BookingApp.API.DTOs;
+using BookingApp.API.Services; // Подключаем сервисы
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-
     public class RoomsController : ControllerBase
     {
-        private readonly BookingDbContext _context;
+        private readonly IRoomService _roomService;
 
-        public RoomsController(BookingDbContext context)
+        public RoomsController(IRoomService roomService)
         {
-            _context = context;
+            _roomService = roomService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateRoom([FromBody] CreateRoomRequestDto request)
         {
-            var newRoom = new Room
-            {
-                Title = request.Title,
-                PricePerNight = request.PricePerNight,
-                HotelId = request.HotelId
-            };
-
-            await _context.Rooms.AddAsync(newRoom);
-            await _context.SaveChangesAsync();
-
+            // Контроллер просто передает данные в сервис
+            var newRoom = await _roomService.CreateRoomAsync(request);
             return Ok(newRoom);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetRooms()
         {
-            var rooms = await _context.Rooms
-                                .Select(r => new RoomsResponseDto
-                                {
-                                    Id = r.Id,
-                                    Title = r.Title,
-                                    PricePerNight = r.PricePerNight,
-
-                                }).ToListAsync();
-
+            var rooms = await _roomService.GetRoomsAsync();
             return Ok(rooms);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRoom(int id, [FromBody] CreateRoomRequestDto request)
         {
-            var existingRoom = await _context.Rooms.FindAsync(id);
+            var updatedRoom = await _roomService.UpdateRoomAsync(id, request);
 
-            if (existingRoom == null)
+            if (updatedRoom == null)
             {
                 return NotFound(new { Message = $"Комната с ID {id} не найдена" });
             }
 
-            existingRoom.Title = request.Title;
-            existingRoom.PricePerNight = request.PricePerNight;
-            existingRoom.HotelId = request.HotelId;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(existingRoom);
+            return Ok(updatedRoom);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoom(int id)
         {
-            var existingRoomDel = await _context.Rooms.FindAsync(id);
+            var isDeleted = await _roomService.DeleteRoomAsync(id);
 
-            if (existingRoomDel == null)
+            if (!isDeleted)
             {
                 return NotFound(new { Message = $"Комната с ID {id} не найдена" });
             }
 
-            _context.Rooms.Remove(existingRoomDel);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { Message = $"Комната {existingRoomDel.Title} успешно удалена" });
+            return Ok(new { Message = $"Комната с ID {id} успешно удалена" });
         }
+
     }
 }

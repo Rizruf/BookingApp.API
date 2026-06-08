@@ -1,8 +1,6 @@
-﻿using BookingApp.API.Data;
-using BookingApp.API.DTOs;
-using BookingApp.API.Models;
+﻿using BookingApp.API.DTOs;
+using BookingApp.API.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingApp.API.Controllers
 {
@@ -10,75 +8,64 @@ namespace BookingApp.API.Controllers
     [Route("api/[controller]")]
     public class HotelsController : ControllerBase
     {
-        private readonly BookingDbContext _context;
+        private readonly IHotelService _hotelService;
 
-        public HotelsController(BookingDbContext context)
+        public HotelsController(IHotelService hotelService)
         {
-            _context = context;
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelRequestDto request)
-        {
-            var newHotel = new Hotel
-            {
-                Title = request.Title,
-                Description = request.Description,
-            };
-
-            await _context.Hotels.AddAsync(newHotel);
-            await _context.SaveChangesAsync();
-
-            return Ok(newHotel);
+            _hotelService = hotelService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetHotels()
         {
-            var hotels = await _context.Hotels 
-                                .Select(h => new HotelResponseDto
-                                {
-                                    Id = h.Id,
-                                    Title = h.Title,
-                                    Description = h.Description,
-                                }).ToListAsync();
-                                
+            var hotels = await _hotelService.GetAllHotelsAsync();
             return Ok(hotels);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetHotel(int id)
+        {
+            var hotel = await _hotelService.GetHotelByIdAsync(id);
+
+            if (hotel == null)
+            {
+                return NotFound(new { Message = $"Отель с ID {id} не найден" });
+            }
+
+            return Ok(hotel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateHotel([FromBody] CreateHotelRequestDto request)
+        {
+            var newHotel = await _hotelService.CreateHotelAsync(request);
+            return Ok(newHotel);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateHotel(int id, [FromBody] CreateHotelRequestDto request)
         {
-            var exitingHotelUpdate = await _context.Hotels.FindAsync(id);
+            var updatedHotel = await _hotelService.UpdateHotelAsync(id, request);
 
-            if (exitingHotelUpdate == null)
+            if (updatedHotel == null)
             {
                 return NotFound(new { Message = $"Отель с ID {id} не найден" });
             }
 
-            exitingHotelUpdate.Title = request.Title;
-            exitingHotelUpdate.Description = request.Description;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(exitingHotelUpdate);
+            return Ok(updatedHotel);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {
-            var exitingHotelDel = await _context.Hotels.FindAsync(id);
+            var isDeleted = await _hotelService.DeleteHotelAsync(id);
 
-            if (exitingHotelDel == null)
+            if (!isDeleted)
             {
-                return NotFound();
+                return NotFound(new { Message = $"Отель с ID {id} не найден" });
             }
 
-            _context.Hotels.Remove(exitingHotelDel);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { Message = $"Отель {exitingHotelDel.Title} успешно удален" });
+            return Ok(new { Message = "Отель успешно удален" });
         }
-
     }
 }

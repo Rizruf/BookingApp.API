@@ -13,12 +13,16 @@ Content-Type: application/json
   "description": "Шикарный вид на море, 5 звезд"
 }
 
-### 3. Обновить отель (PUT) - ОБЯЗАТЕЛЬНО укажи существующий Id!
-PUT {{BookingApp.API_HostAddress}}/api/hotels
+### 3. Обновить отель (PUT) - ОБЯЗАТЕЛЬНО укажи существующий Id в URL!
+PUT {{BookingApp_API_HostAddress}}/api/hotels/1
 Content-Type: application/json
+{
+  "title": "Хилтон Паттайя Премиум",
+  "description": "Теперь 6 звезд и бесплатный мини-бар"
+}
 
 {
-  "id": 2,
+  "id": 3,
   "title": "Хилтон Паттайя Премиум",
   "description": "Теперь 6 звезд и бесплатный мини-бар"
 }

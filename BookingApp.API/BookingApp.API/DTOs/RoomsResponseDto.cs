@@ -8,5 +8,7 @@ namespace BookingApp.API.DTOs
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public decimal PricePerNight { get; set; }
+
+        public string HotelTitle { get; set; }
     }
 }

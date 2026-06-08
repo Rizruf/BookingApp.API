@@ -16,6 +16,9 @@ namespace BookingApp.API.DTOs
         [Range(1, int.MaxValue, ErrorMessage = "RoomId должен быть больше 0")]
         public int RoomId { get; set; }
 
+        [Required(ErrorMessage = "Имя гостя обязательно")]
+        public string GuestName { get; set; } = string.Empty;
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (EndDate <= StartDate)
