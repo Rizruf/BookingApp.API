@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: booking-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SuperStrongP@ssw0rd!
+    ports:
+      - "1433:1433" 
+
+  api:
+    build: . 
+    container_name: booking-api-service
+    ports:
+      - "5000:8080" 
+    depends_on:
+      - db # Говорим API не запускаться, пока не поднимется база
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=BookingApiDb;User Id=sa;Password=SuperStrongP@ssw0rd!;TrustServerCertificate=True;

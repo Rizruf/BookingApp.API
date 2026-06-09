@@ -1,4 +1,4 @@
-@BookingApp.API_HostAddress = http://localhost:5291
+@BookingApp.API_HostAddress = http://localhost:5000
 
 ### 1. Посмотреть все отели (GET)
 GET {{BookingApp.API_HostAddress}}/api/hotels

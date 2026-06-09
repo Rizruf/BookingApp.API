@@ -1,3 +1,4 @@
+using BookingApp.API.Data;
 using BookingApp.API.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,5 +30,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<BookingDbContext>();
+        // Эта команда при старте проверит, есть ли база. Если нет - создаст и накатит все таблицы
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Ошибка при миграции базы данных: {ex.Message}");
+    }
+}
 
 app.Run();
