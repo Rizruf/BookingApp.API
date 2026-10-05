@@ -6,6 +6,7 @@ namespace Domain.Entities
 {
     public class Room
     {
+
         public int Id { get; init; }
 
         public string Type { get; private set; }
@@ -18,6 +19,9 @@ namespace Domain.Entities
 
         public Room(string type, decimal price, string description, int sleepingPlaces)
         {
+            if (sleepingPlaces < 1 || sleepingPlaces > 10)
+                throw new ArgumentOutOfRangeException(nameof(sleepingPlaces), "Количество мест должно быть от 1 до 10.");
+
             Type = type;
             Price = price;
             Description = description;
