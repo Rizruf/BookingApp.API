@@ -1,21 +1,9 @@
-using BookingApp.API.Data;
-using BookingApp.API.Services;
-using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-builder.Services.AddScoped<IHotelService, HotelService>();
-builder.Services.AddScoped<IRoomService, RoomService>();
-builder.Services.AddScoped<IBookingService, BookingService>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<BookingApp.API.Data.BookingDbContext>(options =>options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
@@ -30,20 +18,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<BookingDbContext>();
-        // Эта команда при старте проверит, есть ли база. Если нет - создаст и накатит все таблицы
-        context.Database.Migrate();
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Ошибка при миграции базы данных: {ex.Message}");
-    }
-}
 
 app.Run();
