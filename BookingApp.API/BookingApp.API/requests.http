@@ -1,0 +1,9 @@
+﻿POST http://localhost:5291/api/hotels
+Content-Type: application/json
+
+{
+  "title": "Grand Hotel",
+  "description": "Лучший отель в городе",
+  "rating": 4.5,
+  "address": "ул. Пушкина, 10"
+}
