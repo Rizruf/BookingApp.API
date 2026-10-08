@@ -1,3 +1,5 @@
+using BookingApp.API.Services.BookingService;
+using BookingApp.API.Services.GuestService;
 using BookingApp.API.Services.HotelServices;
 using BookingApp.API.Services.RoomServices;
 using Infrastructure;
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IGuestService, GuestService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookingApp.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/hotels")]
 
     public class HotelController : ControllerBase
     {
