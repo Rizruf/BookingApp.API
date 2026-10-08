@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Infrastructure;
 
-namespace BookingApp.API.Services
+namespace BookingApp.API.Services.HotelServices
 {
     public class HotelService : IHotelService
     {
@@ -13,13 +13,13 @@ namespace BookingApp.API.Services
             _context = context;
         }
 
-        public async Task<HotelResponseDto> CreateHotelAsync(CreateHotelRequestDto request)
+        public async Task<HotelResponseDto> CreateHotelAsync(CreateHotelRequestDto requestHotel)
         {
             var hotel = new Hotel(
-                title: request.Title,
-                description: request.Description,
-                rating: request.Rating,
-                address: request.Address);
+                title: requestHotel.Title,
+                description: requestHotel.Description,
+                rating: requestHotel.Rating,
+                address: requestHotel.Address);
 
             await _context.Hotels.AddAsync(hotel);
             await _context.SaveChangesAsync();

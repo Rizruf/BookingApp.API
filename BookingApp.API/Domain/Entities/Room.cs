@@ -15,9 +15,9 @@ namespace Domain.Entities
         public int SleepingPlaces { get; private set; }
 
         public Hotel? Hotel { get; private set; }
-        public int? HotelId { get; private set; }
+        public int HotelId { get; private set; }
 
-        public Room(string type, decimal price, string description, int sleepingPlaces)
+        public Room(string type, decimal price, string description, int sleepingPlaces, int hotelId)
         {
             if (sleepingPlaces < 1 || sleepingPlaces > 10)
                 throw new ArgumentOutOfRangeException(nameof(sleepingPlaces), "Количество мест должно быть от 1 до 10.");
@@ -26,6 +26,7 @@ namespace Domain.Entities
             Price = price;
             Description = description;
             SleepingPlaces = sleepingPlaces;
+            HotelId = hotelId;
         }
     }
 }

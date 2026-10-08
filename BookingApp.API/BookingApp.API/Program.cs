@@ -1,4 +1,5 @@
-using BookingApp.API.Services;
+using BookingApp.API.Services.HotelServices;
+using BookingApp.API.Services.RoomServices;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

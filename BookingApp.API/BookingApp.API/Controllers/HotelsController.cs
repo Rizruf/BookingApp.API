@@ -1,11 +1,12 @@
 ﻿using BookingApp.API.DTOs.Hotels;
-using BookingApp.API.Services;
+using BookingApp.API.Services.HotelServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class HotelController : ControllerBase
     {
         private readonly IHotelService _hotelService;
@@ -16,9 +17,9 @@ namespace BookingApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<HotelResponseDto>> CreateHotel([FromBody] CreateHotelRequestDto request)
+        public async Task<ActionResult<HotelResponseDto>> CreateHotel([FromBody] CreateHotelRequestDto hotelRequest)
         {
-            var response = await _hotelService.CreateHotelAsync(request);
+            var response = await _hotelService.CreateHotelAsync(hotelRequest);
             return Ok(response);
         }
     }
