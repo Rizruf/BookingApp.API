@@ -5,6 +5,8 @@ namespace BookingApp.API.Services.GuestService
 {
     public interface IGuestService
     {
-        Task<GuestResponseDto> CreateGuestAsync (CreateGuestRequestDto requestGuest); 
+        Task<GuestResponseDto> CreateGuestAsync (CreateGuestRequestDto requestGuest);
+        Task<List<GuestResponseDto>> GetGuestsAsync();
+        Task<GuestResponseDto?> GetGuestByIdAsync(int id);
     }
 }

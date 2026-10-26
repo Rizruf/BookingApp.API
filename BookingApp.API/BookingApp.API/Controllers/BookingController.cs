@@ -15,10 +15,27 @@ namespace BookingApp.API.Controllers
             _bookingService = bookingService;
         }
 
+        [HttpPost]
         public async Task<ActionResult<BookingResponseDto>> CreateBooking([FromBody] CreateBookingRequestDto bookingRequest)
         {
-            var responce = await _bookingService.CreateBookingAsync(bookingRequest);
-            return Ok(responce);
+            var response = await _bookingService.CreateBookingAsync(bookingRequest);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<BookingResponseDto>>> GetBooking()
+        {
+            var response = await _bookingService.GetBookingsAsync();
+            return response;
+        }
+
+        [HttpGet("{id}")]
+
+        public async Task<ActionResult<BookingResponseDto?>> GetBookingByIdAsync(int id)
+        {
+            var response = await _bookingService.GetBookingByIdAsync(id);
+            if (response == null) return NotFound();
+            return response;
         }
     }
 }

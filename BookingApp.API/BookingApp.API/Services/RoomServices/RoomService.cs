@@ -1,6 +1,7 @@
 ﻿using BookingApp.API.DTOs.Rooms;
 using Domain.Entities;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingApp.API.Services.RoomServices
 {
@@ -35,6 +36,39 @@ namespace BookingApp.API.Services.RoomServices
                 SleepingPlaces = room.SleepingPlaces,
                 HotelId = room.HotelId
             };
+        }
+
+        public async Task<List<RoomResponseDto>> GetRoomsAsync()
+        {
+            var rooms = await _context.Rooms
+                              .Select(room => new RoomResponseDto 
+                              {
+                                  Id = room.Id,
+                                  Type = room.Type,
+                                  Price = room.Price,
+                                  Description = room.Description,
+                                  SleepingPlaces = room.SleepingPlaces,
+                                  HotelId = room.HotelId
+
+                              }).ToListAsync();
+
+            return rooms;
+        }
+
+        public async Task<RoomResponseDto?> GetRoomByIdAsync(int id)
+        {
+            var room = await _context.Rooms
+                             .Select(room => new RoomResponseDto
+                             {
+                                 Id = room.Id,
+                                 Type = room.Type,
+                                 Price = room.Price,
+                                 Description = room.Description,
+                                 SleepingPlaces = room.SleepingPlaces,
+                                 HotelId = room.HotelId
+
+                             }).FirstOrDefaultAsync(x => x.Id == id);
+            return room;
         }
     }
 }

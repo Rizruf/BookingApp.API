@@ -22,5 +22,21 @@ namespace BookingApp.API.Controllers
             var response = await _hotelService.CreateHotelAsync(hotelRequest);
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<HotelResponseDto>>> GetHotels()
+        {
+            var response = await _hotelService.GetHotelsAsync();
+            return Ok(response);
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<HotelResponseDto?>> GetHotelById(int id)
+        {
+            var response = await _hotelService.GetHotelByIdAsync(id);
+            if (response == null) return NotFound();
+            return Ok(response);
+        }
     }
 }

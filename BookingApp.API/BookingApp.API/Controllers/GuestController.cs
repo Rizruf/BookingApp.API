@@ -19,8 +19,23 @@ namespace BookingApp.API.Controllers
         [HttpPost]
         public async Task<ActionResult<GuestResponseDto>> CreateGuest([FromBody] CreateGuestRequestDto guestRequest)
         {
-            var responce = await _guestService.CreateGuestAsync(guestRequest);
-            return Ok(responce);
+            var response = await _guestService.CreateGuestAsync(guestRequest);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<GuestResponseDto>>> GetGuests()
+        {
+            var response = await _guestService.GetGuestsAsync();
+            return response;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GuestResponseDto?>> GetGuestById(int id)
+        {
+            var response = await _guestService.GetGuestByIdAsync(id);
+            if (response == null) return NotFound();
+            return response;
         }
     }
 }

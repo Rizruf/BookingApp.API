@@ -1,6 +1,7 @@
 ﻿using BookingApp.API.DTOs.Guests;
 using Domain.Entities;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingApp.API.Services.GuestService
 {
@@ -32,6 +33,38 @@ namespace BookingApp.API.Services.GuestService
                 PhoneNumber = guest.PhoneNumber,
                 Gender = guest.Gender
             };
+        }
+
+        public async Task<List<GuestResponseDto>> GetGuestsAsync()
+        {
+            var guests = await _context.Guests
+                               .Select(guest => new GuestResponseDto
+                               {
+                                   Id = guest.Id,
+                                   Name = guest.Name,
+                                   Surname = guest.Surname,
+                                   PhoneNumber = guest.PhoneNumber,
+                                   Gender = guest.Gender
+
+                               }).ToListAsync();
+
+            return guests;
+        }
+
+        public async Task<GuestResponseDto?> GetGuestByIdAsync(int id)
+        {
+            var guest = await _context.Guests
+                               .Select(guest => new GuestResponseDto
+                               {
+                                   Id = guest.Id,
+                                   Name = guest.Name,
+                                   Surname = guest.Surname,
+                                   PhoneNumber = guest.PhoneNumber,
+                                   Gender = guest.Gender
+
+                               }).FirstOrDefaultAsync(x => x.Id == id);
+
+            return guest;
         }
     }
 }
