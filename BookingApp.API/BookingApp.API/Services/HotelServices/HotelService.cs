@@ -65,5 +65,42 @@ namespace BookingApp.API.Services.HotelServices
                             }).FirstOrDefaultAsync(x => x.Id == id);
             return hotel;
         }
+
+        public async Task<bool> DeleteHotelByIdAsync(int id)
+        {
+            var hotel = await _context.Hotels.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (hotel == null) return false;
+
+            _context.Hotels.Remove(hotel);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<HotelResponseDto?> UpdateHotelAsync(int id, UpdateHotelRequestDto requestUpdateHotel)
+        {
+            var hotel = await _context.Hotels.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (hotel == null) return null;
+
+            hotel.Update(
+                requestUpdateHotel.Title,
+                requestUpdateHotel.Description,
+                requestUpdateHotel.Rating,
+                requestUpdateHotel.Address
+                );
+
+            await _context.SaveChangesAsync();
+
+            return new HotelResponseDto
+            {
+                Id = hotel.Id,
+                Title = hotel.Title,
+                Description = hotel.Description,
+                Rating = hotel.Rating,
+                Address = hotel.Address
+            };
+        }
     }
 }

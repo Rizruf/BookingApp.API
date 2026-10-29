@@ -38,5 +38,21 @@ namespace BookingApp.API.Controllers
             if (response == null) return NotFound();
             return Ok(response);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteHotelByIdAsync(int id)
+        {
+            var response = await _hotelService.DeleteHotelByIdAsync(id);
+            if (response) return NoContent();
+            return NotFound();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<HotelResponseDto>> UpdateHotelAsync(int id, [FromBody] UpdateHotelRequestDto hotelRequest)
+        {
+            var response = await _hotelService.UpdateHotelAsync(id, hotelRequest);
+            if (response == null) return NotFound();
+            return Ok(response);
+        }
     }
 }

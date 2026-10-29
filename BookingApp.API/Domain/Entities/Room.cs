@@ -28,5 +28,17 @@ namespace Domain.Entities
             SleepingPlaces = sleepingPlaces;
             HotelId = hotelId;
         }
+
+        public void Update(string type, decimal price, string description, int sleepingPlaces, int hotelId)
+        {
+            if (sleepingPlaces < 1 || sleepingPlaces > 10)
+                throw new ArgumentOutOfRangeException(nameof(sleepingPlaces), "Количество мест должно быть от 1 до 10.");
+            
+            Type = type;
+            Price = price;
+            Description = description;
+            SleepingPlaces = sleepingPlaces;
+            HotelId = hotelId;
+        }
     }
 }

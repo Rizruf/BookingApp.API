@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using System.Net;
+
+namespace Domain.Entities
 {
     public class Hotel
     {
@@ -12,6 +14,14 @@
         public List<Room> Rooms { get; private set; } = new();
 
         public Hotel(string title, string description, double rating, string address)
+        {
+            Title = title;
+            Description = description;
+            Rating = rating;
+            Address = address;
+        }
+
+        public void Update(string title, string description, double rating, string address)
         {
             Title = title;
             Description = description;

@@ -17,7 +17,7 @@ namespace BookingApp.API.Services.BookingService
         public async Task<BookingResponseDto> CreateBookingAsync(CreateBookingRequestDto requestBooking)
         {
 
-            var booking = new Booking (
+            var booking = new Booking(
                 checkIn: requestBooking.CheckIn,
                 checkOut: requestBooking.CheckOut,
                 guestId: requestBooking.GuestId,
@@ -66,6 +66,43 @@ namespace BookingApp.API.Services.BookingService
                             }).FirstOrDefaultAsync(x => x.Id == id);
 
             return booking;
+        }
+
+        public async Task<bool> DeleteBookingByIdAsync(int id)
+        {
+            var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (booking == null) return false;
+
+            _context.Bookings.Remove(booking);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<BookingResponseDto?> UpdateBookingAsync(int id, UpdateBookingRequestDto requestUpdateBooking)
+        {
+            var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == id);
+
+            if(booking == null) return null;
+
+            booking.Update(
+                requestUpdateBooking.CheckIn,
+                requestUpdateBooking.CheckOut,
+                requestUpdateBooking.GuestId,
+                requestUpdateBooking.RoomId
+            );
+
+            await _context.SaveChangesAsync();
+
+            return new BookingResponseDto
+            {
+                Id = booking.Id,
+                CheckIn = booking.CheckIn,
+                CheckOut = booking.CheckOut,
+                GuestId = booking.GuestId,
+                RoomId = booking.RoomId
+            };
         }
     }
 }

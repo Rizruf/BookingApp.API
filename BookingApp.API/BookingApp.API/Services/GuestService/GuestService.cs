@@ -66,5 +66,43 @@ namespace BookingApp.API.Services.GuestService
 
             return guest;
         }
+
+        public async Task<bool> DeleteGuestByIdAsync(int id)
+        {
+            var guest = await _context.Guests.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (guest == null) return false;
+
+            _context.Guests.Remove(guest);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<GuestResponseDto?> UpdateGuestAsync(int id, UpdateGuestRequestDto requestUpdateGuest)
+        {
+            var guest = await _context.Guests.FirstOrDefaultAsync(x => x.Id == id);
+
+            if(guest == null) return null;
+
+            guest.Update(
+                requestUpdateGuest.Name,
+                requestUpdateGuest.Surname,
+                requestUpdateGuest.PhoneNumber,
+                requestUpdateGuest.Gender
+                );
+
+            await _context.SaveChangesAsync();
+
+            return new GuestResponseDto
+            {
+                Id = guest.Id,
+                Name = guest.Name,
+                Surname = guest.Surname,
+                PhoneNumber = guest.PhoneNumber,
+                Gender = guest.Gender
+            };
+
+        }
     }
 }

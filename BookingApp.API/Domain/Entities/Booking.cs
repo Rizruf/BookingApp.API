@@ -23,5 +23,13 @@ namespace Domain.Entities
             GuestId = guestId;
             RoomId = roomId;
         }
+
+        public void Update(DateOnly checkIn, DateOnly checkOut, int guestId, int roomId)
+        {
+            CheckIn = checkIn;
+            CheckOut = checkOut;
+            GuestId = guestId;
+            RoomId = roomId;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BookingApp.API.DTOs.Booking;
+using BookingApp.API.DTOs.Guests;
 using BookingApp.API.Services.BookingService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,6 +37,24 @@ namespace BookingApp.API.Controllers
             var response = await _bookingService.GetBookingByIdAsync(id);
             if (response == null) return NotFound();
             return response;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteBookingByIdAsync(int id)
+        {
+            var response = await _bookingService.DeleteBookingByIdAsync(id);
+            if (response) return NoContent();
+            return NotFound();
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<BookingResponseDto>> UpdateBookingtasync(int id, [FromBody] UpdateBookingRequestDto bookingRequest)
+        {
+            var response = await _bookingService.UpdateBookingAsync(id, bookingRequest);
+            if (response == null) return NotFound();
+            return Ok(response);
+
         }
     }
 }

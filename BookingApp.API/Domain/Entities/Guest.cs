@@ -21,5 +21,13 @@ namespace Domain.Entities
             PhoneNumber = phoneNumber;
             Gender = gender;
         }
+
+        public void Update(string name, string surname, string phoneNumber, Gender gender)
+        {
+            Name = name;
+            Surname = surname;
+            PhoneNumber = phoneNumber;
+            Gender = gender;
+        }
     }
 }

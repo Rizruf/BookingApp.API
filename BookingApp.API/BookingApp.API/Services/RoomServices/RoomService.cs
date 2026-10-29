@@ -41,7 +41,7 @@ namespace BookingApp.API.Services.RoomServices
         public async Task<List<RoomResponseDto>> GetRoomsAsync()
         {
             var rooms = await _context.Rooms
-                              .Select(room => new RoomResponseDto 
+                              .Select(room => new RoomResponseDto
                               {
                                   Id = room.Id,
                                   Type = room.Type,
@@ -69,6 +69,44 @@ namespace BookingApp.API.Services.RoomServices
 
                              }).FirstOrDefaultAsync(x => x.Id == id);
             return room;
+        }
+
+        public async Task<bool> DeleteRoomByIdAsync(int id)
+        {
+            var room = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (room == null) return false;
+
+            _context.Rooms.Remove(room);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<RoomResponseDto?> UpdateRoomAsync(int id, UpdateRoomRequestDto requestUpdateRoom)
+        {
+            var room = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (room == null) return null;
+
+            room.Update(
+                requestUpdateRoom.Type,
+                requestUpdateRoom.Price,
+                requestUpdateRoom.Description,
+                requestUpdateRoom.SleepingPlaces,
+                requestUpdateRoom.HotelId
+                );
+
+            await _context.SaveChangesAsync();
+
+            return new RoomResponseDto
+            {
+                Id = room.Id,
+                Type = room.Type,
+                Price = room.Price,
+                Description = room.Description,
+                SleepingPlaces = room.SleepingPlaces,
+                HotelId = room.HotelId
+            };
         }
     }
 }
