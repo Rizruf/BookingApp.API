@@ -1,11 +1,12 @@
 ﻿using BookingApp.API.DTOs.Hotels;
 using BookingApp.API.Services.HotelServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingApp.API.Controllers
 {
     [ApiController]
-    [Route("api/hotels")]
+    [Route("api/hotel")]
 
     public class HotelController : ControllerBase
     {
@@ -16,6 +17,7 @@ namespace BookingApp.API.Controllers
             _hotelService = hotelService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<HotelResponseDto>> CreateHotel([FromBody] CreateHotelRequestDto hotelRequest)
         {
@@ -39,6 +41,7 @@ namespace BookingApp.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteHotelByIdAsync(int id)
         {
@@ -47,6 +50,7 @@ namespace BookingApp.API.Controllers
             return NotFound();
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<HotelResponseDto>> UpdateHotelAsync(int id, [FromBody] UpdateHotelRequestDto hotelRequest)
         {

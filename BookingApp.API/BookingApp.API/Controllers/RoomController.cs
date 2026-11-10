@@ -1,12 +1,13 @@
 ﻿using BookingApp.API.DTOs.Rooms;
 using BookingApp.API.Services.RoomServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Formats.Asn1;
 
 namespace BookingApp.API.Controllers
 {
     [ApiController]
-    [Route("api/rooms")]
+    [Route("api/room")]
 
     public class RoomController : ControllerBase
     {
@@ -17,6 +18,7 @@ namespace BookingApp.API.Controllers
             _roomService = roomService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<RoomResponseDto>> CreateRoom([FromBody] CreateRoomRequestDto roomRequest)
         {
@@ -39,6 +41,7 @@ namespace BookingApp.API.Controllers
             return response;
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteRoomByIdAsync (int id)
         {
@@ -47,6 +50,7 @@ namespace BookingApp.API.Controllers
             return NotFound();
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<RoomResponseDto>> UpdateRoomAsync (int id,[FromBody] UpdateRoomRequestDto roomRequest)
         {

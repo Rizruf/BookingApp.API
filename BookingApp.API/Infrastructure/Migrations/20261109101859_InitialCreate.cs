@@ -50,10 +50,10 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,0)", precision: 18, scale: 0, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SleepingPlaces = table.Column<int>(type: "int", nullable: false),
-                    HotelId = table.Column<int>(type: "int", nullable: true)
+                    HotelId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,7 +63,8 @@ namespace Infrastructure.Migrations
                         name: "FK_Rooms_Hotels_HotelId",
                         column: x => x.HotelId,
                         principalTable: "Hotels",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

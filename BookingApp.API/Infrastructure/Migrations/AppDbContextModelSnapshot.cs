@@ -17,7 +17,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -119,12 +119,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HotelId")
+                    b.Property<int>("HotelId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18)
-                        .HasColumnType("decimal(18,0)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SleepingPlaces")
                         .HasColumnType("int");
@@ -141,6 +141,31 @@ namespace Infrastructure.Migrations
                         {
                             t.HasCheckConstraint("CK_Room_SleepingPlaces", "[SleepingPlaces] >= 1 AND [SleepingPlaces] <= 10");
                         });
+                });
+
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.Booking", b =>
@@ -166,7 +191,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Hotel", "Hotel")
                         .WithMany("Rooms")
-                        .HasForeignKey("HotelId");
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Hotel");
                 });
